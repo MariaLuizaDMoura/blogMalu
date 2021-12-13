@@ -1,18 +1,17 @@
 import { environment } from './../../../environments/environment.prod';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TemaService } from './../../service/tema.service';
 import { Tema } from './../../model/Tema';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-tema-delete',
-  templateUrl: './tema-delete.component.html',
-  styleUrls: ['./tema-delete.component.css']
+  selector: 'app-tema-edit',
+  templateUrl: './tema-edit.component.html',
+  styleUrls: ['./tema-edit.component.css']
 })
 export class TemaEditComponent implements OnInit {
 
   tema: Tema = new Tema()
-  idTema: number
 
   constructor(
     private temaService: TemaService,
@@ -25,9 +24,8 @@ export class TemaEditComponent implements OnInit {
       this.router.navigate(['/entrar'])
     }
 
-    this.idTema = this.route.snapshot.params['id']
-    this.findByIdTema(this.idTema)
-
+    let id = this.route.snapshot.params['id']
+    this.findByIdTema(id)
   }
 
   findByIdTema(id: number) {
@@ -36,9 +34,10 @@ export class TemaEditComponent implements OnInit {
     })
   }
 
-  apagar() {
-    this.temaService.deleteTema(this.idTema).subscribe(() => {
-      alert('Tema apagado com sucesso!')
+  atualizar() {
+    this.temaService.putTema(this.tema).subscribe((resp: Tema) => {
+      this.tema = resp
+      alert('Tema atualizado com sucesso!')
       this.router.navigate(['/tema'])
     })
   }
